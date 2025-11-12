@@ -3,22 +3,27 @@ import os, json
 
 app = Flask(__name__)
 
-def load_products():
-    data_path = os.path.join(app.static_folder, "data", "products.json")
-    with open(data_path, "r", encoding="utf-8") as f:
+def _load_json(relpath):
+    with open(os.path.join(app.static_folder, relpath), "r", encoding="utf-8") as f:
         return json.load(f)
+
+def load_products():
+    return _load_json(os.path.join("data", "products.json"))
+
+def load_home_products():
+    return _load_json(os.path.join("data", "homeProducts.json"))
 
 @app.route("/")
 def home():
-    return render_template("index.html", products=load_products())
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
+    return render_template("index.html", products_home=load_home_products())
 
 @app.route("/products")
 def products_page():
     return render_template("product.html", products=load_products())
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/api/products")
 def api_products():

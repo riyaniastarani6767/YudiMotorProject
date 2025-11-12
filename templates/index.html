@@ -9,33 +9,38 @@
   </div>
 </section>
 
-<!-- USP -->
-<section class="py-3 bg-light border-bottom">
+<!-- Keunggulan -->
+<section class="py-4">
   <div class="container">
-    <div class="row g-2 text-center small">
-      <div class="col-12 col-md"><div class="p-2 bg-white rounded shadow-sm">🔧 Pemasangan Cepat</div></div>
-      <div class="col-12 col-md"><div class="p-2 bg-white rounded shadow-sm">🛡️ Barang Bergaransi</div></div>
-      <div class="col-12 col-md"><div class="p-2 bg-white rounded shadow-sm">💬 Konsultasi Gratis</div></div>
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-lg-4"><div class="usp-card">
+        <i class="bi bi-wrench fs-2"></i><div><h6 class="mb-1">Pemasangan Cepat</h6><div class="small opacity-75">Ditangani mekanik berpengalaman.</div></div>
+      </div></div>
+      <div class="col-12 col-md-6 col-lg-4"><div class="usp-card">
+        <i class="bi bi-shield-check fs-2"></i><div><h6 class="mb-1">Barang Bergaransi</h6><div class="small opacity-75">Garansi resmi dan after sales.</div></div>
+      </div></div>
+      <div class="col-12 col-md-6 col-lg-4"><div class="usp-card">
+        <i class="bi bi-chat-dots fs-2"></i><div><h6 class="mb-1">Konsultasi Gratis</h6><div class="small opacity-75">Bantu pilih produk sesuai kebutuhan.</div></div>
+      </div></div>
     </div>
   </div>
 </section>
 
-<!-- Slider Produk Unggulan -->
-<div class="container my-4">
+<!-- Produk Unggulan (slider) -->
+<div class="container my-2">
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h5 class="mb-0">Produk Unggulan</h5>
     <div class="d-flex gap-2">
-      <button class="btn btn-outline-dark btn-sm" data-scroll="#productTrack" data-dir="-1"><i class="bi bi-chevron-left"></i></button>
-      <button class="btn btn-outline-dark btn-sm" data-scroll="#productTrack" data-dir="1"><i class="bi bi-chevron-right"></i></button>
+      <button class="btn btn-outline-dark btn-sm" data-scroll="#track" data-dir="-1"><i class="bi bi-chevron-left"></i></button>
+      <button class="btn btn-outline-dark btn-sm" data-scroll="#track" data-dir="1"><i class="bi bi-chevron-right"></i></button>
     </div>
   </div>
-  <div id="productTrack" class="track">
-    {% for p in products %}
+  <div id="track" class="track">
+    {% for p in products_home %}
     <div class="card product-card"
-         data-name="{{ p.name }}" data-category="{{ p.category }}"
-         data-price="{{ p.price }}" data-image="{{ url_for('static', filename='images/' + p.image) }}"
-         data-desc="{{ p.desc or '' }}">
-      <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-cover-4x3" alt="{{ p.name }}">
+         data-name="{{ p.name }}" data-category="{{ p.category }}" data-price="{{ p.price }}"
+         data-image="{{ url_for('static', filename='images/' + p.image) }}" data-desc="{{ p.desc or '' }}">
+      <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-4x3" alt="{{ p.name }}">
       <div class="card-body">
         <h6 class="card-title text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
         <p class="card-text mb-2 text-muted small">{{ p.category }}</p>
@@ -49,21 +54,19 @@
   </div>
 </div>
 
-<!-- Grid Semua Produk -->
+<!-- Preview Produk -->
 <div class="container my-4">
   <div class="d-flex justify-content-between align-items-center mb-2">
-    <h5 class="mb-0">Semua Produk</h5>
+    <h5 class="mb-0">Beberapa Produk</h5>
     <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('products_page') }}">Lihat semua</a>
   </div>
-
-  <div id="gridAll" class="row g-3 row-cols-1 row-cols-sm-2 row-cols-lg-3">
-    {% for p in products %}
+  <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-lg-3">
+    {% for p in products_home[:6] %}
     <div class="col product-col"
-         data-name="{{ p.name }}" data-category="{{ p.category }}"
-         data-price="{{ p.price }}" data-image="{{ url_for('static', filename='images/' + p.image) }}"
-         data-desc="{{ p.desc or '' }}">
+         data-name="{{ p.name }}" data-category="{{ p.category }}" data-price="{{ p.price }}"
+         data-image="{{ url_for('static', filename='images/' + p.image) }}" data-desc="{{ p.desc or '' }}">
       <div class="card h-100">
-        <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-cover-4x3" alt="{{ p.name }}">
+        <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-4x3" alt="{{ p.name }}">
         <div class="card-body d-flex flex-column">
           <h6 class="text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
           <p class="small text-muted mb-2">{{ p.category }}</p>
@@ -78,30 +81,24 @@
   </div>
 </div>
 
-<!-- Lokasi — map diperkecil -->
+<!-- Lokasi & Jam Buka -->
 <section class="py-4 bg-light">
   <div class="container">
     <h5 class="mb-3">Lokasi & Jam Buka</h5>
     <div class="row g-3 align-items-stretch">
       <div class="col-lg-7">
         <div class="ratio map-embed rounded overflow-hidden shadow-sm">
-          <iframe
-            src="https://www.google.com/maps?q=uFKZbshVpHpEnHkB9&output=embed"
-            style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps?q=uFKZbshVpHpEnHkB9&output=embed"
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0"></iframe>
         </div>
       </div>
       <div class="col-lg-5">
         <div class="p-3 bg-white rounded shadow-sm small h-100">
           <div class="mb-2"><strong>YudiMotor</strong></div>
-          <div>Senin–Sabtu: 08.00–17.00</div>
-          <div>Minggu: Tutup</div>
+          <div>Senin–Sabtu: 08.00–17.00</div><div>Minggu: Tutup</div>
           <hr>
-          <a class="btn btn-success w-100" target="_blank" href="https://wa.me/qr/7G2ZFUXRSK5XE1">
-            <i class="bi bi-whatsapp me-1"></i> Chat WhatsApp
-          </a>
-          <a class="btn btn-outline-secondary w-100 mt-2" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">
-            Lihat di Google Maps
-          </a>
+          <a class="btn btn-success w-100" target="_blank" href="https://wa.me/6285738506679"><i class="bi bi-whatsapp me-1"></i> Chat WhatsApp</a>
+          <a class="btn btn-outline-secondary w-100 mt-2" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">Lihat di Google Maps</a>
         </div>
       </div>
     </div>

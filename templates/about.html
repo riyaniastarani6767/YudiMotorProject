@@ -1,13 +1,230 @@
 {% extends "base.html" %}
 {% set title = "Tentang • YudiMotor" %}
+
 {% block content %}
+
+<!-- ==== Styles khusus halaman About ==== -->
+<style>
+  .about-wrap{max-width:1320px;}
+  .bg-cream{background:#F8F5F2;} /* sama dgn section CTA */
+
+  /* Kartu umum putih */
+  .about-card{
+    background:#fff;
+    border:1px solid #E5E7EB;
+    border-radius:14px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    padding:2rem !important;
+    min-height:180px; /* desktop */
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .about-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 6px 16px rgba(0,0,0,.14);
+  }
+  .icon-brown{color:#6B2B17;}
+  .about-card i{font-size:2.25rem;}
+  .about-card h6{font-size:1.1rem;font-weight:600;}
+  .about-card p{font-size:.95rem;}
+
+  /* Foto kolase */
+  .about-photo{border-radius:16px;overflow:hidden;border:1px solid rgba(0,0,0,.15);box-shadow:0 2px 6px rgba(0,0,0,.2);}
+  .about-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .about-photo-tall{height:520px;}
+  .about-photo-mid{height:360px;}
+
+  /* Animasi: masuk tiap page load */
+  .photo-enter img{
+    opacity:0;
+    transform:translateY(12px) scale(1.02);
+    animation:enter .7s ease-out forwards;
+  }
+  @keyframes enter{
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  /* Ken Burns lembut */
+  .kenburns img{
+    transform-origin:center;
+    animation:ken 14s ease-in-out infinite alternate;
+  }
+  @keyframes ken{
+    0%   { transform:scale(1.03) translate3d(0,0,0); }
+    50%  { transform:scale(1.09) translate3d(2%,-2%,0); }
+    100% { transform:scale(1.05) translate3d(-2%,2%,0); }
+  }
+
+  /* Hover lift untuk desktop */
+  .about-photo:hover{transform:translateY(-4px);transition:transform .35s ease, box-shadow .35s ease;box-shadow:0 6px 18px rgba(0,0,0,.18);}
+
+  /* Responsif */
+  @media (max-width:991.98px){
+    .about-card{min-height:auto;padding:1.25rem !important;}
+    .about-photo-tall{height:380px;}
+    .about-photo-mid{height:280px;}
+  }
+
+  /* Hormati preferensi user */
+  @media (prefers-reduced-motion:reduce){
+    .photo-enter img,.kenburns img{animation:none !important}
+    .about-photo:hover{transform:none !important}
+    .about-card{transition:none !important}
+  }
+</style>
+
+<!-- ==== HERO (coklat sama seperti halaman lain) ==== -->
 <section class="hero">
   <div class="container py-5 text-white">
-    <h1 class="fw-bold">Tentang YudiMotor</h1>
-    <p>Bengkel & toko sparepart motor. Fokus pada ban, oli, aki, dan part fast-moving.</p>
+    <h1 class="fw-bold">Tentang Kami</h1>
+    <p class="mb-0">Bengkel & toko sparepart motor dengan layanan cepat, harga transparan, dan garansi resmi.</p>
   </div>
 </section>
-<div class="container py-4">
-  <p>Alamat, jam buka, dan layanan bisa ditaruh di sini.</p>
-</div>
+
+<!-- ==== SIAPA KAMI (BG krem seperti CTA) ==== -->
+<section class="py-5 bg-cream">
+  <div class="container about-wrap">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6">
+        <h4 class="mb-3">Siapa Kami</h4>
+        <p class="text-muted mb-3">
+          YudiMotor berdiri sejak 2018 dengan fokus pada layanan cepat, hasil rapi, dan harga transparan.
+          Kami mengutamakan kualitas komponen dan kenyamanan pelanggan di setiap pengerjaan.
+        </p>
+        <p class="text-muted mb-4">
+          Dengan tim mekanik berpengalaman dan peralatan lengkap, proses servis berjalan efisien, komunikatif,
+          dan nyaman. Konsultasi selalu terbuka untuk membantu Anda memilih solusi terbaik.
+        </p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-success" target="_blank" href="https://wa.me/6285738506679">
+            <i class="bi bi-whatsapp me-1"></i> Chat WhatsApp
+          </a>
+          <a class="btn btn-outline-secondary" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">
+            <i class="bi bi-geo-alt me-1"></i> Lihat di Google Maps
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+         <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+          <!-- Foto tinggi -->
+          <div class="about-photo about-photo-tall flex-fill min-w-0">
+            <img src="{{ url_for('static', filename='images/about.png') }}" alt="Tentang YudiMotor">
+          </div>
+          <!-- Foto sedang (pakai file sama; nanti boleh diganti about2.png kalau punya) -->
+          <div class="about-photo about-photo-mid flex-fill min-w-0 d-none d-md-block align-self-end">
+            <img src="{{ url_for('static', filename='images/about.png') }}" alt="Tim YudiMotor">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==== LAYANAN KAMI (card lebih besar) ==== -->
+<section class="py-5 bg-white">
+  <div class="container about-wrap">
+    <h4 class="mb-4">Layanan Kami</h4>
+    <div class="row g-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
+      <div class="col">
+        <div class="about-card h-100 d-flex gap-3 align-items-start">
+          <i class="bi bi-tools icon-brown"></i>
+          <div><h6 class="mb-1">Perbaikan Umum</h6><p class="mb-0 text-muted">Servis mesin, suspensi, rem, hingga kelistrikan.</p></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card h-100 d-flex gap-3 align-items-start">
+          <i class="bi bi-gear icon-brown"></i>
+          <div><h6 class="mb-1">Servis Berkala</h6><p class="mb-0 text-muted">Ganti oli, filter, penyetelan, dan pengecekan menyeluruh.</p></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card h-100 d-flex gap-3 align-items-start">
+          <i class="bi bi-droplet icon-brown"></i>
+          <div><h6 class="mb-1">Ganti Oli</h6><p class="mb-0 text-muted">Stok oli resmi dengan rekomendasi pabrikan.</p></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card h-100 d-flex gap-3 align-items-start">
+          <i class="bi bi-lightning icon-brown"></i>
+          <div><h6 class="mb-1">Kelistrikan</h6><p class="mb-0 text-muted">Aki, pengisian, kabel, dan lampu.</p></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card h-100 d-flex gap-3 align-items-start">
+          <i class="bi bi-speedometer2 icon-brown"></i>
+          <div><h6 class="mb-1">Ban & Kaki-Kaki</h6><p class="mb-0 text-muted">Ganti ban, spooring sederhana, kampas rem.</p></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card h-100 d-flex gap-3 align-items-start">
+          <i class="bi bi-ev-front icon-brown"></i>
+          <div><h6 class="mb-1">Aksesori</h6><p class="mb-0 text-muted">Busi, filter, dan aksesoris fungsional.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==== REVIEW ==== -->
+<section class="py-5 bg-white">
+  <div class="container about-wrap">
+    <h4 class="mb-4">Apa Kata Pelanggan</h4>
+    <div class="row g-3 row-cols-1 row-cols-md-3">
+      <div class="col">
+        <div class="about-card p-3 h-100">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:#6B2B17;color:#fff;">A</div>
+            <strong>Andi</strong>
+          </div>
+          <div class="mb-1" style="letter-spacing:2px;color:#f4b400;">★★★★★</div>
+          <p class="small mb-2 text-muted">Pelayanan cepat, harga sesuai, hasil rapi. Recommended!</p>
+          <a class="small text-decoration-none" style="color:#6B2B17" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">Lihat selengkapnya di Google</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card p-3 h-100">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:#6B2B17;color:#fff;">S</div>
+            <strong>Sinta</strong>
+          </div>
+          <div class="mb-1" style="letter-spacing:2px;color:#f4b400;">★★★★★</div>
+          <p class="small mb-2 text-muted">Konsultasi sangat membantu pilih ban sesuai harian.</p>
+          <a class="small text-decoration-none" style="color:#6B2B17" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">Lihat selengkapnya di Google</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="about-card p-3 h-100">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:#6B2B17;color:#fff;">R</div>
+            <strong>Rudi</strong>
+          </div>
+          <div class="mb-1" style="letter-spacing:2px;color:#f4b400;">★★★★★</div>
+          <p class="small mb-2 text-muted">Stok lengkap, teknisi ramah, proses penggantian cepat.</p>
+          <a class="small text-decoration-none" style="color:#6B2B17" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">Lihat selengkapnya di Google</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a class="btn btn-outline-secondary" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">Lihat Semua Review</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==== CTA (bg krem yang sama) ==== -->
+<section class="py-5 bg-cream">
+  <div class="container about-wrap text-center">
+    <h3 class="h5 fw-semibold mb-2">Butuh bantuan atau ingin konsultasi?</h3>
+    <p class="text-muted mb-3">Tim kami siap membantu Senin–Sabtu, 08.00–17.00.</p>
+    <div class="d-flex gap-2 flex-wrap justify-content-center">
+      <a class="btn btn-success" target="_blank" href="https://wa.me/6285738506679">
+        <i class="bi bi-whatsapp me-1"></i> Chat WhatsApp
+      </a>
+      <a class="btn btn-outline-secondary" target="_blank" href="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9">
+        <i class="bi bi-geo-alt me-1"></i> Lihat di Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
 {% endblock %}
