@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% set title = "Home • YudiMotor" %}
+{% block content %}
+
+<section class="hero">
+  <div class="container py-5 text-white">
+    <h1 class="fw-bold">Koleksi Produk</h1>
+    <p class="mb-0">Ban, oli, aki, dan sparepart pilihan YudiMotor.</p>
+  </div>
+</section>
+
+<!-- USP / keunggulan -->
+<section class="py-3 bg-light border-bottom">
+  <div class="container">
+    <div class="row g-2 text-center small">
+      <div class="col-12 col-md"><div class="p-2 bg-white rounded shadow-sm">🔧 Pemasangan Cepat</div></div>
+      <div class="col-12 col-md"><div class="p-2 bg-white rounded shadow-sm">🛡️ Barang Bergaransi</div></div>
+      <div class="col-12 col-md"><div class="p-2 bg-white rounded shadow-sm">💬 Konsultasi Gratis</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Slider Produk Unggulan -->
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h5 class="mb-0">Produk Unggulan</h5>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-dark btn-sm" data-scroll="#productTrack" data-dir="-1"><i class="bi bi-chevron-left"></i></button>
+      <button class="btn btn-outline-dark btn-sm" data-scroll="#productTrack" data-dir="1"><i class="bi bi-chevron-right"></i></button>
+    </div>
+  </div>
+  <div id="productTrack" class="track">
+    {% for p in products %}
+    <div class="card product-card">
+      <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-cover-3x2" alt="{{ p.name }}">
+      <div class="card-body">
+        <h6 class="card-title text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
+        <p class="card-text mb-2 text-muted small">{{ p.category }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
+          <a href="{{ url_for('products_page') }}" class="btn btn-sm btn-dark">Detail</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Grid Semua Produk (vertical scroll) -->
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h5 class="mb-0">Semua Produk</h5>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('products_page') }}">Lihat semua</a>
+  </div>
+
+  <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-4">
+    {% for p in products %}
+    <div class="col">
+      <div class="card h-100">
+        <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-cover-3x2" alt="{{ p.name }}">
+        <div class="card-body d-flex flex-column">
+          <h6 class="text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
+          <p class="small text-muted mb-2">{{ p.category }}</p>
+          <div class="mt-auto d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
+            <a class="btn btn-sm btn-dark" href="https://wa.me/qr/7G2ZFUXRSK5XE1" target="_blank"><i class="bi bi-whatsapp"></i> Beli</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Lokasi -->
+<section class="py-4 bg-light">
+  <div class="container">
+    <h5 class="mb-3">Lokasi & Jam Buka</h5>
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
+          <iframe
+            src="https://maps.app.goo.gl/uFKZbshVpHpEnHkB9"
+            style="border:0" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="p-3 bg-white rounded shadow-sm small">
+          <div class="mb-2"><strong>YudiMotor</strong></div>
+          <div>Senin–Sabtu: 08.00–17.00</div>
+          <div>Minggu: Tutup</div>
+          <hr>
+          <a class="btn btn-success w-100" target="_blank" href="https://wa.me/qr/7G2ZFUXRSK5XE1"><i class="bi bi-whatsapp me-1"></i> Chat WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
