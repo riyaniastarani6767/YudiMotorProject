@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, url_for
+from flask import Flask, render_template, jsonify
 import os, json
 
 app = Flask(__name__)
@@ -10,8 +10,7 @@ def load_products():
 
 @app.route("/")
 def home():
-    products = load_products()
-    return render_template("index.html", products=products)
+    return render_template("index.html", products=load_products())
 
 @app.route("/about")
 def about():
@@ -21,11 +20,9 @@ def about():
 def products_page():
     return render_template("product.html", products=load_products())
 
-# optional: endpoint json
 @app.route("/api/products")
 def api_products():
     return jsonify(load_products())
 
 if __name__ == "__main__":
-    # untuk lokal
     app.run(host="0.0.0.0", port=8080, debug=True)

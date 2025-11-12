@@ -4,50 +4,41 @@
 }
 body.bg-body{ background:#fff; }
 
+/* Hero bar */
 .hero{ background:var(--hero); color:#fff; }
 
-/* strip sosmed */
+/* strip sosmed & footer */
 .social-strip{ background:var(--hero); color:#fff; padding:12px 0; }
-
-/* Footer */
 .footer{ background:var(--footer); color:#fff; padding:14px 0; }
 
-/* Horizontal track slider */
+/* Navbar brand logo */
+.brand-logo{ height: 44px; width:auto; }
+@media (min-width: 992px){ .brand-logo{ height: 48px; } }
+
+/* Search lebih besar */
+#searchAll{ height: 42px; }
+
+/* Horizontal slider */
 .track{
-  display:flex; gap:12px;
-  overflow-x:auto;
-  scroll-behavior:smooth;
-  scroll-snap-type:x mandatory;
+  display:flex; gap:12px; overflow-x:auto;
+  scroll-behavior:smooth; scroll-snap-type:x mandatory;
   padding:6px 2px 10px;
 }
-.track::-webkit-scrollbar{ height:8px; }
-.track::-webkit-scrollbar-thumb{ background:#bbb; border-radius:999px; }
+.product-card{ min-width: 280px; scroll-snap-align:start; }
 
-.product-card{
-  min-width: 220px;
-  scroll-snap-align:start;
-}
+/* Gambar kartu proporsional */
+.obj-cover-4x3{ aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* Map embed lebih pendek */
+.map-embed{ --h: 280px; }     /* ubah ke 240px kalau masih terasa tinggi */
+.map-embed iframe{ width:100%; height: var(--h); }
 
 /* Floating WhatsApp */
 .fab-wa{
   position:fixed; right:18px; bottom:18px;
-  width:56px; height:56px;
-  border-radius:50%;
+  width:56px; height:56px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
   background:#25D366; color:#fff; font-size:26px;
-  box-shadow:0 8px 24px rgba(0,0,0,.18);
-  z-index: 1040;
-  text-decoration:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.18); z-index:1040; text-decoration:none;
 }
 .fab-wa:hover{ filter:brightness(.95); }
-/* --- Navbar brand logo --- */
-.brand-logo{ height: 44px; width:auto; }
-@media (min-width: 992px){
-  .brand-logo{ height: 48px; }
-}
-
-/* gambar kartu 3:2, cover */
-.obj-cover-3x2{
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-}
