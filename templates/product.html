@@ -2,6 +2,22 @@
 {% set title = "Produk • YudiMotor" %}
 {% block content %}
 
+<style>
+  /* Kartu gambar lebih tinggi (portrait) */
+  .obj-portrait{
+    width:100%;
+    aspect-ratio:3/4;
+    object-fit:cover;
+    border-top-left-radius:.75rem;
+    border-top-right-radius:.75rem;
+  }
+  .card{ transition:transform .2s ease, box-shadow .2s ease; }
+  .card:hover{ transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.12); }
+
+  /* util untuk paginasi/filter */
+  .d-none-important{ display:none !important; }
+</style>
+
 <section class="hero">
   <div class="container py-5 text-white">
     <h1 class="fw-bold">Semua Produk</h1>
@@ -10,26 +26,183 @@
 </section>
 
 <div class="container py-4">
-  <div id="prodGrid" class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-4">
+
+  <!-- Search di halaman (backup jika navbar tidak ada / tidak nyambung) -->
+  <form id="pageSearchForm" class="row g-2 mb-3">
+    <div class="col-9 col-md-6">
+      <input id="pageSearchInput" type="search" class="form-control" placeholder="Cari produk (mis. aki, ban, oli)..." />
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-dark" type="submit">Cari</button>
+    </div>
+    <div class="col-12 small text-muted">Kamu bisa pakai kolom ini atau search di navbar—dua-duanya aktif.</div>
+  </form>
+
+  <!-- Grid: 3 kolom di desktop biar kartu lebih besar -->
+  <div id="prodGrid" class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-3">
     {% for p in products %}
     <div class="col prod-item"
-         data-name="{{ p.name }}" data-category="{{ p.category }}" data-price="{{ p.price }}"
-         data-image="{{ url_for('static', filename='images/' + p.image) }}" data-desc="{{ p.desc or '' }}">
-      <div class="card h-100">
-        <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-4x3" alt="{{ p.name }}">
+         data-name="{{ p.name|lower }}"
+         data-category="{{ p.category|lower }}"
+         data-price="{{ p.price }}"
+         data-image="{{ url_for('static', filename='images/' + p.image) }}"
+         data-desc="{{ (p.desc or '')|e }}">
+      <div class="card h-100 rounded-3 shadow-sm">
+        <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-portrait" alt="{{ p.name }}">
         <div class="card-body d-flex flex-column">
           <h6 class="text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
           <p class="small text-muted mb-2">{{ p.category }}</p>
           <div class="mt-auto d-flex justify-content-between align-items-center">
             <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
-            <button class="btn btn-sm btn-dark btn-detail">Detail</button>
+            <!-- tanpa data-bs-* supaya tidak auto-open ganda -->
+            <button type="button" class="btn btn-sm btn-dark btn-detail">Detail</button>
           </div>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
+
+  <!-- Pager -->
   <div id="pager" class="d-flex justify-content-center gap-2 mt-3"></div>
 </div>
+
+<script>
+(function(){
+  /* ============== Anti-double guards (modal di base.html) ============== */
+  const _mods = document.querySelectorAll('#prodModal');
+  _mods.forEach((el,i)=>{ if(i>0) el.remove(); });
+  if (window.__YUDI_PRODUCTS_INIT__) return;
+  window.__YUDI_PRODUCTS_INIT__ = true;
+
+  /* ============== Elemen & state ============== */
+  const PAGE_SIZE = 12;
+  const grid   = document.getElementById('prodGrid');
+  const cards  = Array.from(grid.querySelectorAll('.prod-item'));
+  const pager  = document.getElementById('pager');
+  const modalEl= document.getElementById('prodModal'); // boleh tidak ada di sini jika didefinisikan di base.html
+
+  // navbar (kalau ada), plus search di halaman (selalu ada)
+  const navForm  = document.querySelector('.navbar form, #navSearchForm');
+  const navInput = document.querySelector('.navbar input[type="search"], #navSearchInput, .navbar input[type="text"]');
+  const pageForm = document.getElementById('pageSearchForm');
+  const pageInput= document.getElementById('pageSearchInput');
+
+  let term = ''; // selalu lowercase
+
+  /* ============== Helper ============== */
+  function rupiah(x){ return 'Rp ' + Number(x||0).toLocaleString('id-ID'); }
+
+  function itemMatch(el){
+    if(!term) return true;
+    // data-* sudah diset lower di template
+    const name = el.dataset.name || '';
+    const cat  = el.dataset.category || '';
+    return name.includes(term) || cat.includes(term);
+  }
+
+  function getFiltered(){
+    return cards.filter(itemMatch);
+  }
+
+  /* ============== Render (paginate + filter) ============== */
+  function render(page=1){
+    const list  = getFiltered();
+    const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    const cur   = Math.min(Math.max(1, page), pages);
+
+    // sembunyikan semua
+    cards.forEach(c => c.classList.add('d-none-important'));
+    // tampilkan yang terfilter + halaman terkait
+    const start = (cur-1)*PAGE_SIZE;
+    list.slice(start, start + PAGE_SIZE).forEach(c => c.classList.remove('d-none-important'));
+
+    // pager
+    pager.innerHTML = '';
+    for(let i=1;i<=pages;i++){
+      const b = document.createElement('button');
+      b.className = 'btn btn-sm ' + (i===cur ? 'btn-dark' : 'btn-outline-dark');
+      b.textContent = i;
+      b.addEventListener('click', ()=>render(i));
+      pager.appendChild(b);
+    }
+  }
+
+  /* ============== Modal detail (single show) ============== */
+  grid.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.btn-detail');
+    if(!btn) return;
+
+    const item = e.target.closest('.prod-item');
+    const name = item.querySelector('h6').textContent.trim();
+    const cat  = item.querySelector('.small.text-muted').textContent.trim();
+    const price= item.dataset.price;
+    const img  = item.dataset.image;
+    const desc = item.dataset.desc || 'Deskripsi singkat produk.';
+
+    const t = document.getElementById('mTitle');
+    if (t){ t.textContent = name; }
+    const c = document.getElementById('mCat');
+    if (c){ c.textContent = cat; }
+    const p = document.getElementById('mPrice');
+    if (p){ p.textContent = rupiah(price); }
+    const d = document.getElementById('mDesc');
+    if (d){ d.textContent = desc; }
+    const im= document.getElementById('mImg');
+    if (im){ im.src = img; im.alt = name; }
+
+    const wa= document.getElementById('mWA');
+    if (wa){
+      const msg = encodeURIComponent(`Halo, saya mau tanya tentang ${name} (${rupiah(price)})`);
+      wa.href = `https://wa.me/?text=${msg}`;
+    }
+
+    if (modalEl){
+      // pastikan tidak double
+      document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+      const old = bootstrap.Modal.getInstance(modalEl);
+      if (old) old.dispose();
+      new bootstrap.Modal(modalEl).show();
+    }
+  });
+
+  /* ============== Search bindings (navbar & on-page) ============== */
+  function doSearch(q){
+    term = (q || '').trim().toLowerCase();
+    render(1);
+  }
+
+  // Navbar
+  if (navForm){
+    navForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      doSearch(navInput ? navInput.value : '');
+    });
+  }
+  if (navInput){
+    navInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        doSearch(navInput.value);
+      }
+    });
+  }
+
+  // Search di halaman
+  pageForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    doSearch(pageInput.value);
+  });
+  pageInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      doSearch(pageInput.value);
+    }
+  });
+
+  // pertama kali
+  render(1);
+})();
+</script>
 
 {% endblock %}

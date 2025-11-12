@@ -61,3 +61,4 @@ body.bg-body{ background:#fff; }
 /* FAB */
 .fab-wa{ position:fixed; right:18px; bottom:18px; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#25D366; color:#fff; font-size:26px; box-shadow:0 8px 24px rgba(0,0,0,.18); z-index:1040; text-decoration:none; }
 .fab-wa:hover{ filter:brightness(.95); }
+
