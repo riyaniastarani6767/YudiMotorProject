@@ -14,20 +14,20 @@
   .card{ transition:transform .2s ease, box-shadow .2s ease; }
   .card:hover{ transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.12); }
 
-  /* util untuk paginasi/filter */
+  /* util untuk search */
   .d-none-important{ display:none !important; }
 </style>
 
 <section class="hero">
   <div class="container py-5 text-white">
     <h1 class="fw-bold">Semua Produk</h1>
-    <p>Tampilkan semua produk. Gunakan pencarian untuk menemukan barang lebih cepat.</p>
+    <p>Jelajahi koleksi lengkap kami. Gunakan fitur pencarian untuk menemukan produk dengan mudah.</p>
   </div>
 </section>
 
 <div class="container py-4">
 
-  <!-- Search di halaman (backup jika navbar tidak ada / tidak nyambung) -->
+  <!-- Search di halaman -->
   <form id="pageSearchForm" class="row g-2 mb-3">
     <div class="col-9 col-md-6">
       <input id="pageSearchInput" type="search" class="form-control" placeholder="Cari produk (mis. aki, ban, oli)..." />
@@ -54,7 +54,6 @@
           <p class="small text-muted mb-2">{{ p.category }}</p>
           <div class="mt-auto d-flex justify-content-between align-items-center">
             <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
-            <!-- tanpa data-bs-* supaya tidak auto-open ganda -->
             <button type="button" class="btn btn-sm btn-dark btn-detail">Detail</button>
           </div>
         </div>
@@ -63,77 +62,63 @@
     {% endfor %}
   </div>
 
-  <!-- Pager -->
-  <div id="pager" class="d-flex justify-content-center gap-2 mt-3"></div>
+  <!-- Pager server-side -->
+  <nav aria-label="Product pagination" class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('products_page', page=page-1) }}"
+        >Sebelumnya</a>
+      </li>
+
+      {% for p in range(1, total_pages + 1) %}
+      <li class="page-item {% if p == page %}active{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('products_page', page=p) }}"
+        >{{ p }}</a>
+      </li>
+      {% endfor %}
+
+      <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('products_page', page=page+1) }}"
+        >Berikutnya</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <script>
 (function(){
-  /* ============== Anti-double guards (modal di base.html) ============== */
-  const _mods = document.querySelectorAll('#prodModal');
-  _mods.forEach((el,i)=>{ if(i>0) el.remove(); });
-  if (window.__YUDI_PRODUCTS_INIT__) return;
-  window.__YUDI_PRODUCTS_INIT__ = true;
-
-  /* ============== Elemen & state ============== */
-  const PAGE_SIZE = 12;
   const grid   = document.getElementById('prodGrid');
-  const cards  = Array.from(grid.querySelectorAll('.prod-item'));
-  const pager  = document.getElementById('pager');
-  const modalEl= document.getElementById('prodModal'); // boleh tidak ada di sini jika didefinisikan di base.html
+  if (!grid) return;
 
-  // navbar (kalau ada), plus search di halaman (selalu ada)
+  const cards  = Array.from(grid.querySelectorAll('.prod-item'));
+  const modalEl= document.getElementById('prodModal');
+
   const navForm  = document.querySelector('.navbar form, #navSearchForm');
   const navInput = document.querySelector('.navbar input[type="search"], #navSearchInput, .navbar input[type="text"]');
   const pageForm = document.getElementById('pageSearchForm');
   const pageInput= document.getElementById('pageSearchInput');
 
-  let term = ''; // selalu lowercase
-
-  /* ============== Helper ============== */
   function rupiah(x){ return 'Rp ' + Number(x||0).toLocaleString('id-ID'); }
 
-  function itemMatch(el){
-    if(!term) return true;
-    // data-* sudah diset lower di template
-    const name = el.dataset.name || '';
-    const cat  = el.dataset.category || '';
-    return name.includes(term) || cat.includes(term);
+  function applyFilter(term){
+    const q = (term || '').trim().toLowerCase();
+    cards.forEach(card => {
+      const name = card.dataset.name || '';
+      const cat  = card.dataset.category || '';
+      const match = !q || name.includes(q) || cat.includes(q);
+      card.classList.toggle('d-none-important', !match);
+    });
   }
 
-  function getFiltered(){
-    return cards.filter(itemMatch);
-  }
-
-  /* ============== Render (paginate + filter) ============== */
-  function render(page=1){
-    const list  = getFiltered();
-    const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
-    const cur   = Math.min(Math.max(1, page), pages);
-
-    // sembunyikan semua
-    cards.forEach(c => c.classList.add('d-none-important'));
-    // tampilkan yang terfilter + halaman terkait
-    const start = (cur-1)*PAGE_SIZE;
-    list.slice(start, start + PAGE_SIZE).forEach(c => c.classList.remove('d-none-important'));
-
-    // pager
-    pager.innerHTML = '';
-    for(let i=1;i<=pages;i++){
-      const b = document.createElement('button');
-      b.className = 'btn btn-sm ' + (i===cur ? 'btn-dark' : 'btn-outline-dark');
-      b.textContent = i;
-      b.addEventListener('click', ()=>render(i));
-      pager.appendChild(b);
-    }
-  }
-
-  /* ============== Modal detail (single show) ============== */
+  // klik "Detail" → buka modal
   grid.addEventListener('click', (e)=>{
     const btn = e.target.closest('.btn-detail');
     if(!btn) return;
 
-    const item = e.target.closest('.prod-item');
+    const item = btn.closest('.prod-item');
     const name = item.querySelector('h6').textContent.trim();
     const cat  = item.querySelector('.small.text-muted').textContent.trim();
     const price= item.dataset.price;
@@ -141,13 +126,13 @@
     const desc = item.dataset.desc || 'Deskripsi singkat produk.';
 
     const t = document.getElementById('mTitle');
-    if (t){ t.textContent = name; }
+    if (t) t.textContent = name;
     const c = document.getElementById('mCat');
-    if (c){ c.textContent = cat; }
+    if (c) c.textContent = cat;
     const p = document.getElementById('mPrice');
-    if (p){ p.textContent = rupiah(price); }
+    if (p) p.textContent = rupiah(price);
     const d = document.getElementById('mDesc');
-    if (d){ d.textContent = desc; }
+    if (d) d.textContent = desc;
     const im= document.getElementById('mImg');
     if (im){ im.src = img; im.alt = name; }
 
@@ -158,7 +143,6 @@
     }
 
     if (modalEl){
-      // pastikan tidak double
       document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
       const old = bootstrap.Modal.getInstance(modalEl);
       if (old) old.dispose();
@@ -166,13 +150,11 @@
     }
   });
 
-  /* ============== Search bindings (navbar & on-page) ============== */
   function doSearch(q){
-    term = (q || '').trim().toLowerCase();
-    render(1);
+    applyFilter(q);
   }
 
-  // Navbar
+  // Search navbar (kalau ada)
   if (navForm){
     navForm.addEventListener('submit', (e)=>{
       e.preventDefault();
@@ -189,19 +171,18 @@
   }
 
   // Search di halaman
-  pageForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    doSearch(pageInput.value);
-  });
-  pageInput.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter'){
+  if (pageForm && pageInput){
+    pageForm.addEventListener('submit', (e)=>{
       e.preventDefault();
       doSearch(pageInput.value);
-    }
-  });
-
-  // pertama kali
-  render(1);
+    });
+    pageInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        doSearch(pageInput.value);
+      }
+    });
+  }
 })();
 </script>
 
