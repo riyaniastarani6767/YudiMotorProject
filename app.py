@@ -71,7 +71,6 @@ def products_page():
         page=page,
         total_pages=total_pages,
     )
-
 @app.route("/about")
 def about():
     return render_template("about.html")
