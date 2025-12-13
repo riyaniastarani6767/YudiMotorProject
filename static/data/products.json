@@ -15,7 +15,8 @@
     "name": "Ban Corsa Platinum R26",
     "category": "Ban",
     "price": 295000,
-    "image": "ban-3.jpg"
+    "image": "ban-3.jpg",
+    "desc": "Ban harian dengan teknologi Platinum, tahan lama."
   },
   {
     "name": "Ban IRC Eco Touring",
@@ -120,6 +121,86 @@
     "name": "Oli Shell Advance 0.8L",
     "category": "Oli",
     "price": 56000,
+    "image": "yoga-1.jpg"
+  },
+    {
+    "name": "Ban Maxxis M6181",
+    "category": "Ban",
+    "price": 330000,
+    "image": "ban-9.jpg"
+  },
+  {
+    "name": "Ban Pirelli Angel City",
+    "category": "Ban",
+    "price": 345000,
+    "image": "ban-7.jpg"
+  },
+   {
+    "name": "Ban FDR Sport XR 90/80-14",
+    "category": "Ban",
+    "price": 315000,
+    "image": "ban-2.jpg"
+  },
+   {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "yoga-1.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "oli-1.jpg"
+  },    {
+    "name": "Oli Federal Matic 0.8L",
+    "category": "Oli",
+    "price": 52000,
+    "image": "oli-3.jpg"
+  },
+  {
+    "name": "Oli Castrol Power 1 0.8L",
+    "category": "Oli",
+    "price": 55000,
+    "image": "oli-4.jpg"
+  },
+  {
+    "name": "Oli Shell Advance 0.8L",
+    "category": "Oli",
+    "price": 56000,
+    "image": "oli-6.jpg"
+  },
+
+  {
+    "name": "Aki GS GTZ5S",
+    "category": "Aki",
+    "price": 245000,
+    "image": "aki-1.jpg"
+  },
+  {
+    "name": "Aki Yuasa YTZ5S",
+    "category": "Aki",
+    "price": 260000,
+    "image": "aki-2.jpg"
+  },
+
+  {
+    "name": "Kampas Rem BRT",
+    "category": "Sparepart",
+    "price": 38000,
+    "image": "kampasrem-1.jpg"
+  },
+   {
+    "name": "Kampas Rem BRT",
+    "category": "Sparepart",
+    "price": 38000,
+    "image": "kampasrem-1.jpg"
+  },
+   {
+    "name": "Oli Shell Advance 0.8L",
+    "category": "Oli",
+    "price": 56000,
     "image": "oli-6.jpg"
   },
     {
@@ -151,6 +232,124 @@
     "name": "Oli Yamalube 0.8L",
     "category": "Oli",
     "price": 48000,
-    "image": "oli-1.jpg"
+    "image": "yoga-1.jpg"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "ban-11.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "yoga-1.jpg"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "ban-11.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "yoga-1.jpg"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "ban-11.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "yoga-1.jpg"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "ban-11.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "yoga-1.jpg"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "ban-11.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "yoga-1.jpg"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "ban-11.jpg"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "yoga-1.jpg"
+  },
+   {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "16.png"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "15.png"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "14.png"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "13.png"
+  },
+     {
+    "name": "Ban Aspira Premio Sportivo",
+    "category": "Ban",
+    "price": 290000,
+    "image": "12.png"
+  },
+
+  {
+    "name": "Oli Yamalube 0.8L",
+    "category": "Oli",
+    "price": 48000,
+    "image": "11.png"
   }
+
 ]

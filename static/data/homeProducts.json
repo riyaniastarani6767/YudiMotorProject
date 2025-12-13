@@ -4,7 +4,7 @@
   { "id": "home-oli-yamalube", "name": "Oli Yamalube 0.8L", "category": "Oli", "price": 48000, "image": "oli-1.jpg", "desc": "Oli mesin matic 0.8L, perlindungan optimal." },
   { "id": "home-aki-gs", "name": "Aki GS GTZ5S", "category": "Aki", "price": 245000, "image": "aki-1.jpg", "desc": "Aki MF GTZ5S untuk berbagai motor matic/bebek." },
   { "id": "home-kampas-brt", "name": "Kampas Rem BRT", "category": "Sparepart", "price": 38000, "image": "kampasrem-1.jpg", "desc": "Kampas rem depan, daya cengkeram konsisten." },
-  { "id": "home-busi-ngk", "name": "Busi NGK CR7HSA", "category": "Sparepart", "price": 28000, "image": "ban-5.jpg", "desc": "Busi standar NGK untuk pembakaran optimal." },
+  { "id": "home-busi-ngk", "name": "Busi NGK CR7HSA", "category": "Sparepart", "price": 28000, "image": "yoga-1.jpg", "desc": "Busi standar NGK untuk pembakaran optimal." },
   { "id": "home-irc-nr76", "name": "Ban IRC NR76 80/90-14", "category": "Ban", "price": 265000, "image": "oli1-1.jpg", "desc": "Ban harian grip baik, ukuran 80/90 ring 14." },
   { "id": "home-fdr-sport", "name": "Ban FDR Sport XR 90/80-14", "category": "Ban", "price": 315000, "image": "oli-2.jpg", "desc": "Ban sporty, handling stabil untuk matic." },
   { "id": "home-oli-yamalube", "name": "Oli Yamalube 0.8L", "category": "Oli", "price": 48000, "image": "oli-3.jpg", "desc": "Oli mesin matic 0.8L, perlindungan optimal." },
