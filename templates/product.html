@@ -3,7 +3,7 @@
 {% block content %}
 
 <style>
-  /* Kartu gambar lebih tinggi (portrait) */
+  /* Kartu gambar portrait */
   .obj-portrait{
     width:100%;
     aspect-ratio:3/4;
@@ -11,11 +11,20 @@
     border-top-left-radius:.75rem;
     border-top-right-radius:.75rem;
   }
-  .card{ transition:transform .2s ease, box-shadow .2s ease; }
-  .card:hover{ transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.12); }
+
+  .card{
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
+  }
 
   /* util untuk search */
-  .d-none-important{ display:none !important; }
+  .d-none-important{
+    display:none !important;
+  }
+  
 </style>
 
 <section class="hero">
@@ -27,18 +36,21 @@
 
 <div class="container py-4">
 
-  <!-- Search di halaman -->
+  <!-- Search -->
   <form id="pageSearchForm" class="row g-2 mb-3">
     <div class="col-9 col-md-6">
-      <input id="pageSearchInput" type="search" class="form-control" placeholder="Cari produk (mis. aki, ban, oli)..." />
+      <input id="pageSearchInput" type="search" class="form-control"
+             placeholder="Cari produk (mis. aki, ban, oli)..." />
     </div>
     <div class="col-auto">
       <button class="btn btn-dark" type="submit">Cari</button>
     </div>
-    <div class="col-12 small text-muted">Kamu bisa pakai kolom ini atau search di navbar—dua-duanya aktif.</div>
+    <div class="col-12 small text-muted">
+      Kamu bisa pakai kolom ini atau search di navbar—dua-duanya aktif.
+    </div>
   </form>
 
-  <!-- Grid: 3 kolom di desktop biar kartu lebih besar -->
+  <!-- Grid produk -->
   <div id="prodGrid" class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-3">
     {% for p in products %}
     <div class="col prod-item"
@@ -47,45 +59,70 @@
          data-price="{{ p.price }}"
          data-image="{{ url_for('static', filename='images/' + p.image) }}"
          data-desc="{{ (p.desc or '')|e }}">
+
       <div class="card h-100 rounded-3 shadow-sm">
-        <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-portrait" alt="{{ p.name }}">
+        <img src="{{ url_for('static', filename='images/' + p.image) }}"
+             class="card-img-top obj-portrait"
+             alt="{{ p.name }}">
+
         <div class="card-body d-flex flex-column">
-          <h6 class="text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
-          <p class="small text-muted mb-2">{{ p.category }}</p>
+          <!-- NAMA PRODUK -->
+          <h6 class="text-truncate text-uppercase fw-semibold"
+              title="{{ p.name }}">
+            {{ p.name }}
+          </h6>
+
+          <!-- KATEGORI -->
+          <p class="small text-uppercase text-muted mb-2">
+            {{ p.category }}
+          </p>
+
           <div class="mt-auto d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
-            <button type="button" class="btn btn-sm btn-dark btn-detail">Detail</button>
+            <span class="fw-semibold">
+              Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}
+            </span>
+            <button type="button"
+                    class="btn btn-sm btn-dark btn-detail">
+              Detail
+            </button>
           </div>
         </div>
       </div>
+
     </div>
     {% endfor %}
   </div>
 
-  <!-- Pager server-side -->
+  <!-- Pagination -->
   <nav aria-label="Product pagination" class="mt-3">
     <ul class="pagination justify-content-center">
+
       <li class="page-item {% if page <= 1 %}disabled{% endif %}">
         <a class="page-link"
-           href="{{ url_for('products_page', page=page-1) }}"
-        >Sebelumnya</a>
+           href="{{ url_for('products_page', page=page-1) }}">
+          Sebelumnya
+        </a>
       </li>
 
       {% for p in range(1, total_pages + 1) %}
       <li class="page-item {% if p == page %}active{% endif %}">
         <a class="page-link"
-           href="{{ url_for('products_page', page=p) }}"
-        >{{ p }}</a>
+           href="{{ url_for('products_page', page=p) }}">
+          {{ p }}
+        </a>
       </li>
       {% endfor %}
 
       <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
         <a class="page-link"
-           href="{{ url_for('products_page', page=page+1) }}"
-        >Berikutnya</a>
+           href="{{ url_for('products_page', page=page+1) }}">
+          Berikutnya
+        </a>
       </li>
+
     </ul>
   </nav>
+
 </div>
 
 <script>
@@ -101,7 +138,9 @@
   const pageForm = document.getElementById('pageSearchForm');
   const pageInput= document.getElementById('pageSearchInput');
 
-  function rupiah(x){ return 'Rp ' + Number(x||0).toLocaleString('id-ID'); }
+  function rupiah(x){
+    return 'Rp ' + Number(x||0).toLocaleString('id-ID');
+  }
 
   function applyFilter(term){
     const q = (term || '').trim().toLowerCase();
@@ -113,74 +152,53 @@
     });
   }
 
-  // klik "Detail" → buka modal
+  // klik Detail → modal
   grid.addEventListener('click', (e)=>{
     const btn = e.target.closest('.btn-detail');
     if(!btn) return;
 
     const item = btn.closest('.prod-item');
+
     const name = item.querySelector('h6').textContent.trim();
-    const cat  = item.querySelector('.small.text-muted').textContent.trim();
+    const cat  = item.querySelector('.small').textContent.trim();
     const price= item.dataset.price;
     const img  = item.dataset.image;
-    const desc = item.dataset.desc || 'Deskripsi singkat produk.';
+    const desc = item.dataset.desc || 'Deskripsi produk belum tersedia.';
 
-    const t = document.getElementById('mTitle');
-    if (t) t.textContent = name;
-    const c = document.getElementById('mCat');
-    if (c) c.textContent = cat;
-    const p = document.getElementById('mPrice');
-    if (p) p.textContent = rupiah(price);
-    const d = document.getElementById('mDesc');
-    if (d) d.textContent = desc;
-    const im= document.getElementById('mImg');
-    if (im){ im.src = img; im.alt = name; }
+    document.getElementById('mTitle').textContent = name;
+    document.getElementById('mCat').textContent   = cat;
+    document.getElementById('mPrice').textContent = rupiah(price);
+    document.getElementById('mDesc').textContent  = desc;
 
-    const wa= document.getElementById('mWA');
-    if (wa){
-      const msg = encodeURIComponent(`Halo, saya mau tanya tentang ${name} (${rupiah(price)})`);
-      wa.href = `https://wa.me/?text=${msg}`;
-    }
+    const im = document.getElementById('mImg');
+    im.src = img;
+    im.alt = name;
 
-    if (modalEl){
-      document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-      const old = bootstrap.Modal.getInstance(modalEl);
-      if (old) old.dispose();
-      new bootstrap.Modal(modalEl).show();
-    }
+    const wa = document.getElementById('mWA');
+    const msg = encodeURIComponent(`Halo, saya mau tanya tentang ${name} (${rupiah(price)})`);
+    wa.href = `https://wa.me/?text=${msg}`;
+
+    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+    const old = bootstrap.Modal.getInstance(modalEl);
+    if (old) old.dispose();
+    new bootstrap.Modal(modalEl).show();
   });
 
   function doSearch(q){
     applyFilter(q);
   }
 
-  // Search navbar (kalau ada)
   if (navForm){
-    navForm.addEventListener('submit', (e)=>{
+    navForm.addEventListener('submit', e=>{
       e.preventDefault();
       doSearch(navInput ? navInput.value : '');
     });
   }
-  if (navInput){
-    navInput.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter'){
-        e.preventDefault();
-        doSearch(navInput.value);
-      }
-    });
-  }
 
-  // Search di halaman
-  if (pageForm && pageInput){
-    pageForm.addEventListener('submit', (e)=>{
+  if (pageForm){
+    pageForm.addEventListener('submit', e=>{
       e.preventDefault();
       doSearch(pageInput.value);
-    });
-    pageInput.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter'){
-        e.preventDefault();
-        doSearch(pageInput.value);
-      }
     });
   }
 })();
