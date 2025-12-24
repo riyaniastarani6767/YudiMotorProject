@@ -14,14 +14,18 @@
   }
 
   /* Slider rapi */
-  #homePage .track{ display:flex; gap:.75rem; overflow-x:auto; scroll-snap-type:x mandatory; }
-  #homePage .product-card{ min-width:240px; scroll-snap-align:start; }
+  #homePage .track{ display:flex; gap:.75rem; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior: smooth; }
+  #homePage .product-card{ min-width:240px; scroll-snap-align:start; cursor: pointer; }
+  
+  /* Modal Styling */
+  .modal-backdrop { background-color: rgba(0,0,0,0.5); }
+  .modal-body img { max-height: 400px; object-fit: contain; }
 </style>
 
 <div id="homePage">
   <section class="hero">
     <div class="container py-5 text-white">
-      <h1 class="fw-bold">Selamat Datang di YudiMotor</h1>
+      <h1 class="fw-bold">Selamat Datang di Yudi Motor</h1>
       <p class="mb-0">Temukan berbagai ban, oli, aki, dan produk pilihan lainnya untuk kendaraan Anda.</p>
     </div>
   </section>
@@ -48,21 +52,23 @@
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h5 class="mb-0">Produk Unggulan</h5>
       <div class="d-flex gap-2">
-        <button class="btn btn-outline-dark btn-sm" data-scroll="#track" data-dir="-1"><i class="bi bi-chevron-left"></i></button>
-        <button class="btn btn-outline-dark btn-sm" data-scroll="#track" data-dir="1"><i class="bi bi-chevron-right"></i></button>
+        <button class="btn btn-outline-dark btn-sm" id="btnScrollLeft"><i class="bi bi-chevron-left"></i></button>
+        <button class="btn btn-outline-dark btn-sm" id="btnScrollRight"><i class="bi bi-chevron-right"></i></button>
       </div>
     </div>
     <div id="track" class="track">
       {% for p in products_home %}
       <div class="card product-card"
            data-name="{{ p.name }}" data-category="{{ p.category }}" data-price="{{ p.price }}"
-           data-image="{{ url_for('static', filename='images/' + p.image) }}" data-desc="{{ p.desc or '' }}">
+           data-image="{{ url_for('static', filename='images/' + p.image) }}" 
+           data-desc="{{ p.desc or '' }}"
+           data-spesifikasi="{{ p.spesifikasi_motor or '' }}">
         <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-4x3" alt="{{ p.name }}">
         <div class="card-body">
           <h6 class="card-title text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
           <p class="card-text mb-2 text-muted small">{{ p.category }}</p>
           <div class="d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
+            <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) if p.price is number else p.price | replace(",", ".") }}</span>
             <button class="btn btn-sm btn-dark btn-detail">Detail</button>
           </div>
         </div>
@@ -81,14 +87,16 @@
       {% for p in products_home[:6] %}
       <div class="col product-col"
            data-name="{{ p.name }}" data-category="{{ p.category }}" data-price="{{ p.price }}"
-           data-image="{{ url_for('static', filename='images/' + p.image) }}" data-desc="{{ p.desc or '' }}">
+           data-image="{{ url_for('static', filename='images/' + p.image) }}" 
+           data-desc="{{ p.desc or '' }}"
+           data-spesifikasi="{{ p.spesifikasi_motor or '' }}">
         <div class="card h-100">
           <img src="{{ url_for('static', filename='images/' + p.image) }}" class="card-img-top obj-4x3" alt="{{ p.name }}">
           <div class="card-body d-flex flex-column">
             <h6 class="text-truncate" title="{{ p.name }}">{{ p.name }}</h6>
             <p class="small text-muted mb-2">{{ p.category }}</p>
             <div class="mt-auto d-flex justify-content-between align-items-center">
-              <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}</span>
+              <span class="fw-semibold">Rp {{ "{:,.0f}".format(p.price) if p.price is number else p.price | replace(",", ".") }}</span>
               <button class="btn btn-sm btn-dark btn-detail">Beli</button>
             </div>
           </div>
@@ -128,5 +136,162 @@
     </div>
   </section>
 </div>
+
+<!-- Modal Detail Produk -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Detail Produk</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <img id="modalImage" src="" alt="" class="img-fluid rounded">
+        </div>
+        <h5 id="modalName" class="fw-bold"></h5>
+        <p class="text-muted mb-2"><small id="modalCategory"></small></p>
+        <h4 class="text-primary mb-3" id="modalPrice"></h4>
+        
+        <div id="modalDesc" class="mb-3"></div>
+        <div id="modalSpesifikasi" class="mb-3"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-success" id="btnOrderWA">
+          <i class="bi bi-whatsapp me-1"></i> Pesan via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Fungsi untuk scroll slider
+  const track = document.getElementById('track');
+  const btnScrollLeft = document.getElementById('btnScrollLeft');
+  const btnScrollRight = document.getElementById('btnScrollRight');
+  
+  if (btnScrollLeft && track) {
+    btnScrollLeft.addEventListener('click', function() {
+      track.scrollBy({ left: -300, behavior: 'smooth' });
+    });
+  }
+  
+  if (btnScrollRight && track) {
+    btnScrollRight.addEventListener('click', function() {
+      track.scrollBy({ left: 300, behavior: 'smooth' });
+    });
+  }
+  
+  // Inisialisasi Bootstrap Modal
+  const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+  let currentProductData = null;
+  
+  // Fungsi untuk menampilkan modal dengan data produk
+  function showProductModal(productData) {
+    currentProductData = productData;
+    
+    document.getElementById('modalImage').src = productData.image;
+    document.getElementById('modalName').textContent = productData.name;
+    document.getElementById('modalCategory').textContent = productData.category;
+    
+    // Format harga
+    let priceText = '';
+    if (productData.price.includes('-')) {
+      priceText = 'Rp ' + productData.price.replace(',', '.');
+    } else {
+      priceText = 'Rp ' + parseInt(productData.price).toLocaleString('id-ID');
+    }
+    document.getElementById('modalPrice').textContent = priceText;
+    
+    // Deskripsi
+    const descEl = document.getElementById('modalDesc');
+    if (productData.desc) {
+      descEl.innerHTML = '<strong>Deskripsi:</strong><br>' + productData.desc.replace(/\n/g, '<br>');
+      descEl.style.display = 'block';
+    } else {
+      descEl.style.display = 'none';
+    }
+    
+    // Spesifikasi Motor
+    const spesifikasiEl = document.getElementById('modalSpesifikasi');
+    if (productData.spesifikasi) {
+      spesifikasiEl.innerHTML = '<strong>Cocok untuk motor:</strong><br>' + productData.spesifikasi;
+      spesifikasiEl.style.display = 'block';
+    } else {
+      spesifikasiEl.style.display = 'none';
+    }
+    
+    productModal.show();
+  }
+  
+  // Handler untuk tombol Detail/Beli
+  document.querySelectorAll('#homePage .btn-detail').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      const parent = this.closest('[data-name]');
+      if (parent) {
+        const productData = {
+          name: parent.dataset.name,
+          category: parent.dataset.category,
+          price: parent.dataset.price,
+          image: parent.dataset.image,
+          desc: parent.dataset.desc || '',
+          spesifikasi: parent.dataset.spesifikasi || ''
+        };
+        
+        showProductModal(productData);
+      }
+    });
+  });
+  
+  // Handler untuk klik pada card produk
+  document.querySelectorAll('#homePage .product-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.btn-detail')) return;
+      
+      const productData = {
+        name: this.dataset.name,
+        category: this.dataset.category,
+        price: this.dataset.price,
+        image: this.dataset.image,
+        desc: this.dataset.desc || '',
+        spesifikasi: this.dataset.spesifikasi || ''
+      };
+      
+      showProductModal(productData);
+    });
+  });
+  
+  // Handler untuk tombol Order WhatsApp di modal
+  document.getElementById('btnOrderWA').addEventListener('click', function() {
+    if (currentProductData) {
+      let priceText = '';
+      if (currentProductData.price.includes('-')) {
+        priceText = 'Rp ' + currentProductData.price;
+      } else {
+        priceText = 'Rp ' + parseInt(currentProductData.price).toLocaleString('id-ID');
+      }
+      
+      let message = `Halo, saya tertarik dengan produk:\n\n` +
+                   `Nama: ${currentProductData.name}\n` +
+                   `Kategori: ${currentProductData.category}\n` +
+                   `Harga: ${priceText}\n`;
+      
+      if (currentProductData.spesifikasi) {
+        message += `Motor: ${currentProductData.spesifikasi}\n`;
+      }
+      
+      message += `\nApakah produk ini tersedia?`;
+      
+      const waUrl = `https://wa.me/6285738506679?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+    }
+  });
+});
+</script>
 
 {% endblock %}

@@ -2,114 +2,315 @@
   {
     "name": "BAN KENDA NMX R-13",
     "category": "Ban",
-    "price":240000,
+    "price": "240000-350000",
     "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "desc": "\nUkuran tersedia:\n• 110/70-13\n• 120/70-13\n• 130/70-13\n• 140/70-13\n",
+    "spesifikasi_motor": "NMAX,PCX"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN KENDA SCOOPY NEW R-12",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "220000-250000",
+    "image": "BAN KENDA K609 SCOOPY R-12.png",
+    "desc": "\nUkuran tersedia:\n• 100/90-12\n• 110/90-12\n",
+    "spesifikasi_motor": "SCOOPY,GENIO,STYLO"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN KENDA K6010 SCOOPY R-14",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "190000-240000",
+    "image": "BAN KENDA K6010 SCOOPY R-14.png",
+    "desc": "\nUkuran tersedia:\n•80/90-14\n• 90/90-14\n",
+    "spesifikasi_motor": "SCOOPY,BEAT,VARIO"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN KENDA RACING VARIO",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "210000-240000",
+    "image": "BAN KENDA RACING VARIO.png",
+    "desc": "\nUkuran tersedia:\n•80/90-14\n• 90/90-14\n",
+    "spesifikasi_motor": "SCOOPY,BEAT,VARIO"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN MAXXIS VICTRA ST R-12",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "370000-415000",
+    "image": "BAN MAXXIS VICTRA ST 110_70-12.png",
+    "desc": "\nUkuran tersedia:\n• 110/70-12\n• 120/70-12\n",
+    "spesifikasi_motor": "VESPA,FILANO,FAZZIO"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN MAXXIS VICTRA ST R-13",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "340000-450000",
+    "image": "BAN MAXXIS VICTRA 110_70-13.png",
+    "desc": "\nUkuran tersedia:\n• 110/70-13\n• 120/70-13\n• 130/70-13\n• 140/70-13\n",
+    "spesifikasi_motor": "NMAX,PCX"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN MAXXIS M922 R-12",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "340000-390000",
+    "image": "BAN MAXXIS M922.png",
+    "desc": "\nUkuran tersedia:\n• 110/70-12\n• 120/70-12\n",
+    "spesifikasi_motor": "VESPA,FILANO,FAZZIO"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN MAXXIS VICTRA ST R-14 PCX",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "360000-445000",
+    "image": "BAN MAXXIS PCX.png",
+    "desc": "\nUkuran tersedia:\n•100/80-14\n• 120/70-14\n",
+    "spesifikasi_motor": "PCX"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN FDR BLAZE NMX",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "370000-475000",
+    "image": "BAN FDR BLAZE NMX.png",
+    "desc": "\nUkuran tersedia:\n• 120/70-13\n• 140/70-13\n",
+    "spesifikasi_motor": "NMAX,PCX"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN IRC SS 570F",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "310000-375000",
+    "image": "BAN IRC SS 570F.png",
+    "desc": "\nUkuran tersedia:\n• 110/70-13\n•130/70-13\n",
+    "spesifikasi_motor": "NMAX,PCX"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
+  {
+    "name": "BAN IRC SCOOPY R-12",
     "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+    "price": "260000-310000",
+    "image": "BAN IRC SCOOPY R-12.png",
+    "desc": "\nUkuran tersedia:\n• 100/90-12\n• 110/90-12\n",
+    "spesifikasi_motor": "SCOOPY,GENIO,STYLO"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
-    "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
 
+  {
+    "name": "OLI MOTUL SCOOTER EXPERT LE SAE 10W-40 1 L",
+    "category": "Oli",
+    "price": 120000,
+    "image": "OLI MOTUL SCOOTER EXPERT LE SAE 10W-40 1 L.png",
+    "desc": "SCOOTER EXPERT LE SAE 10W-40 1 L"
   },
-   {
-    "name": "BAN KENDA NMX R-13",
-    "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
-
+  {
+    "name": "OLI MOTUL SCOOTER POWER LE 5W 40 MATIC 1L",
+    "category": "Oli",
+    "price": 145000,
+    "image": "OLI MOTUL SCOOTER POWER LE 5W 40 MATIC 1L.png",
+    "desc": "SCOOTER POWER LE SAE 5W 40 MATIC 1L"
   },
-     {
-    "name": "OLI",
-    "category": "Ban",
-    "price":240000,
-    "image": "BAN KENDA NMX K6007 TL.png",
-    "desc": "desc:Ban tubeless dengan daya cengkeram optimal.\nCocok untuk berbagai kondisi jalan.\n\nUkuran tersedia:\n• 80/90-14 — Rp220.000\n• 90/90-14 — Rp240.000\n• 100/90-14 — Rp260.000"
+  {
+    "name": "OLI MOTUL MOTO 10W 40 MANUAL 1L",
+    "category": "Oli",
+    "price": 240000,
+    "image": "OLI MOTUL MOTO 10W 40 MANUAL 1L.png",
+    "desc": "MOTO 10W 40 MANUAL 1L"
+  },
+  {
+    "name": "OLI MOTUL SCOOTER LE 10W 30 MATIC 1L",
+    "category": "Oli",
+    "price": 85000,
+    "image": "OLI MOTUL SCOOTER LE 10W 30 MATIC 1L.png",
+    "desc": "SCOOTER LE 10W 30 MATIC 1L"
+  },
+  {
+    "name": "OLI MOTUL 510 2T 1L",
+    "category": "Oli",
+    "price": 125000,
+    "image": "OLI MOTUL 510 2T 1L.png",
+    "desc": "510 2T 1L"
+  },
+  {
+    "name": "OLI MOTUL GP MATIC 10W 40 1L",
+    "category": "Oli",
+    "price": 80000,
+    "image": "OLI MOTUL GP MATIC 10W 40 1L.png",
+    "desc": "MATIC SAE 10W 40 1L"
+  },
+  {
+    "name": "OLI MOTUL MOTO 10W 40 MANUAL 0.8L",
+    "category": "Oli",
+    "price": 80000,
+    "image": "OLI MOTUL MOTO 10W 40 MANUAL 0.8L.png",
+    "desc": "SAE 10W 40 MANUAL 0.8L"
+  },
+  {
+    "name": "OLI MOTUL SCOOTER EXPERT LE 10W 40 MATIC 0.8 L",
+    "category": "Oli",
+    "price": 90000,
+    "image": "OLI MOTUL SCOOTER EXPERT LE 10W 40 MATIC 0.8 L.png",
+    "desc": "SAE 10W 40 MATIC 0.8 L"
+  },
+  {
+    "name": "OLI IPONE 10W 40 MATIC 1L",
+    "category": "Oli",
+    "price": 80000,
+    "image": "OLI IPONE 10W 40 MATIC 1L.png",
+    "desc": "SAE 10W 40 MATIC 1L"
+  },
+  {
+    "name": "OLI IPONE 10W 40 MATIC 0.8L",
+    "category": "Oli",
+    "price": 80000,
+    "image": "OLI IPONE 10W 40 MATIC 0.8L.png",
+    "desc": "SAE 10W 40 MATIC 0.8L"
+  },
+  {
+    "name": "OLI MOTUL SCOOTER LE 10W 30 MATIC 0.8 L",
+    "category": "Oli",
+    "price": 65000,
+    "image": "OLI MOTUL SCOOTER LE 10W 30 MATIC 0.8 L.png",
+    "desc": "SCOOTER LE SAE 10W 30 MATIC 0.8 L"
+  },
+  {
+    "name": "OLI MOTUL SCOOTER GEAR 80W 90 120 ML",
+    "category": "Oli",
+    "price": 20000,
+    "image": "OLI MOTUL SCOOTER GEAR 80W 90 120 ML.png",
+    "desc": "SCOOTER GEAR 80W 90 120 ML"
+  },
+  {
+    "name": "OLI YAMALUBE GEAR 150 ML",
+    "category": "Oli",
+    "price": 25000,
+    "image": "OLI YAMALUBE GEAR 150 ML.png",
+    "desc": "YAMALUBE GEAR 150 ML"
+  },
+  {
+    "name": "OLI GRAND GEAR MATIC 120 ML",
+    "category": "Oli",
+    "price": 20000,
+    "image": "OLI GRAND GEAR MATIC 120 ML.png",
+    "desc": "GRAND GEAR MATIC 120 ML"
+  },
+  {
+    "name": "OLI HONDA GEAR 10W 30 SL 120 ML",
+    "category": "Oli",
+    "price": 20000,
+    "image": "OLI HONDA GEAR 10W 30 SL 120 ML.png",
+    "desc": "HONDA GEAR 10W 30 SL 120 ML"
+  },
+  {
+    "name": "OLI CASTROL 2T",
+    "category": "Oli",
+    "price": 40000,
+    "image": "OLI CASTROL 2T.png",
+    "desc": "CASTROL 2T 0.7 L"
+  },
+  {
+    "name": "OLI EVALUBE PRO 2T",
+    "category": "Oli",
+    "price": 40000,
+    "image": "OLI EVALUBE PRO 2T.png",
+    "desc": "EVALUBE PRO 2T 0,7 L"
+  },
+  {
+    "name": "OLI EVALUBE 2T",
+    "category": "Oli",
+    "price": 28000,
+    "image": "OLI EVALUBE 2T.png",
+    "desc": "EVALUBE 2T 0,7 L"
+  },
+  {
+    "name": "OLI MESRANIA B 40 1L",
+    "category": "Oli",
+    "price": 40000,
+    "image": "OLI MESRANIA B 40 1L.png",
+    "desc": "MESRANIA B 40 1L"
+  },
+  {
+    "name": "OLI MESRANIA SUPER 20W 50 1L",
+    "category": "Oli",
+    "price": 55000,
+    "image": "OLI MESRANIA SUPER 20W 50 1L.png",
+    "desc": "SAE 20W 50 1L"
+  },
+  {
+    "name": "OLI MESRANIA 2T",
+    "category": "Oli",
+    "price": 50000,
+    "image": "OLI MESRANIA 2T.png",
+    "desc": "MESRANIA 2T 0,7 L"
+  },
+  {
+    "name": "OLI HONDA MPX 1  0.8 L",
+    "category": "Oli",
+    "price": 55000,
+    "image": "OLI HONDA MPX 1  0.8 L.png",
+    "desc": "MPX 1 SAE 10W30  0.8 L"
+  },
+  {
+    "name": "OLI HONDA MPX 2 0.8L",
+    "category": "Oli",
+    "price": 55000,
+    "image": "OLI HONDA MPX 2 0.8L.png",
+    "desc": "MPX 2 SAE 10W30 0.8L"
+  },
+  {
+    "name": "OLI YAMALUBE SILVER 20W 40 0.8L",
+    "category": "Oli",
+    "price": 55000,
+    "image": "OLI YAMALUBE SILVER 20W 40 MANUAL 0.8L.png",
+    "desc": "SAE 20W40 0.8L"
+  },
+  {
+    "name": "OLI YAMALUBE SPORT 10W 40 MANUAL  1 L",
+    "category": "Oli",
+    "price": 75000,
+    "image": "OLI YAMALUBE SPORT 10W 40 MANUAL  1 L.png",
+    "desc": "SAE 10W 40 MANUAL  1 L"
+  },
+  {
+    "name": "OLI YAMALUBE SUPER MATIC 10W40 1L",
+    "category": "Oli",
+    "price": 75000,
+    "image": "OLI YAMALUBE SUPER MATIC 10W40 1L.png",
+    "desc": "SAE 10W40 1L"
+  },
+  {
+    "name": "OLI EVALUBE SCOOTIC 20W 40 0.8 L",
+    "category": "Oli",
+    "price": 50000,
+    "image": "OLI EVALUBE SCOOTIC 20W 40 0.8 L.png",
+    "desc": "SAE 20W 40 0.8 L"
+  },
 
+  {
+    "name": "ROLLER BRT PCX 160 15 GRAM",
+    "category": "Oli",
+    "price": 100000,
+    "image": "ROLLER BRT PCX 160 15 GRAM.png",
+    "desc": "BRT PCX160 ,VARIO 160 15 GRAM"
+  },
+  {
+    "name": "ROLLER BRT NMX 11 GRAM",
+    "category": "Oli",
+    "price": 100000,
+    "image": "ROLLER BRT NMX 11 GRAM.png",
+    "desc": "BRT NMX,AEROX 11 GRAM"
+  },
+  {
+    "name": "ROLLER BRT SCOOPY 11 GRAM",
+    "category": "Oli",
+    "price": 100000,
+    "image": "ROLLER BRT SCOOPY 11 GRAM.png",
+    "desc": "BRT SCOOPY,BEAT,VARIO 11 GRAM"
+  },
+  {
+    "name": "ROLLER BRT MIO 8 GRAM",
+    "category": "Oli",
+    "price": 80000,
+    "image": "ROLLER BRT MIO 8 GRAM.png",
+    "desc": "BRT MIO 8 GRAM"
+  },
+  {
+    "name": "ROLLER VARIO 125 11 GRAM",
+    "category": "Oli",
+    "price": 100000,
+    "image": "ROLLER VARIO 125 11 GRAM.png",
+    "desc": "ROLLER VARIO 125,VARIO 150,SCOOPY NEW KOJ 11 GRAM"
   }
-
 ]

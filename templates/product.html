@@ -3,7 +3,6 @@
 {% block content %}
 
 <style>
-  /* Kartu gambar portrait */
   .obj-portrait{
     width:100%;
     aspect-ratio:3/4;
@@ -11,7 +10,6 @@
     border-top-left-radius:.75rem;
     border-top-right-radius:.75rem;
   }
-
   .card{
     transition:transform .2s ease, box-shadow .2s ease;
   }
@@ -19,12 +17,9 @@
     transform:translateY(-2px);
     box-shadow:0 6px 16px rgba(0,0,0,.12);
   }
-
-  /* util untuk search */
   .d-none-important{
     display:none !important;
   }
-  
 </style>
 
 <section class="hero">
@@ -46,7 +41,7 @@
       <button class="btn btn-dark" type="submit">Cari</button>
     </div>
     <div class="col-12 small text-muted">
-      Kamu bisa pakai kolom ini atau search di navbar—dua-duanya aktif.
+      Cari produk menggunakan fitur pencarian di atas. Anda dapat mencari berdasarkan nama atau kategori produk.
     </div>
   </form>
 
@@ -66,20 +61,18 @@
              alt="{{ p.name }}">
 
         <div class="card-body d-flex flex-column">
-          <!-- NAMA PRODUK -->
           <h6 class="text-truncate text-uppercase fw-semibold"
               title="{{ p.name }}">
             {{ p.name }}
           </h6>
 
-          <!-- KATEGORI -->
           <p class="small text-uppercase text-muted mb-2">
             {{ p.category }}
           </p>
 
           <div class="mt-auto d-flex justify-content-between align-items-center">
             <span class="fw-semibold">
-              Rp {{ "{:,.0f}".format(p.price) | replace(",", ".") }}
+              Rp {{ p.price }}
             </span>
             <button type="button"
                     class="btn btn-sm btn-dark btn-detail">
@@ -127,19 +120,13 @@
 
 <script>
 (function(){
-  const grid   = document.getElementById('prodGrid');
+  const grid = document.getElementById('prodGrid');
   if (!grid) return;
 
-  const cards  = Array.from(grid.querySelectorAll('.prod-item'));
-  const modalEl= document.getElementById('prodModal');
+  const cards = Array.from(grid.querySelectorAll('.prod-item'));
 
-  const navForm  = document.querySelector('.navbar form, #navSearchForm');
-  const navInput = document.querySelector('.navbar input[type="search"], #navSearchInput, .navbar input[type="text"]');
-  const pageForm = document.getElementById('pageSearchForm');
-  const pageInput= document.getElementById('pageSearchInput');
-
-  function rupiah(x){
-    return 'Rp ' + Number(x||0).toLocaleString('id-ID');
+  function rupiahText(x){
+    return 'Rp ' + (x || '-');
   }
 
   function applyFilter(term){
@@ -152,55 +139,11 @@
     });
   }
 
-  // klik Detail → modal
-  grid.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.btn-detail');
-    if(!btn) return;
-
-    const item = btn.closest('.prod-item');
-
-    const name = item.querySelector('h6').textContent.trim();
-    const cat  = item.querySelector('.small').textContent.trim();
-    const price= item.dataset.price;
-    const img  = item.dataset.image;
-    const desc = item.dataset.desc || 'Deskripsi produk belum tersedia.';
-
-    document.getElementById('mTitle').textContent = name;
-    document.getElementById('mCat').textContent   = cat;
-    document.getElementById('mPrice').textContent = rupiah(price);
-    document.getElementById('mDesc').textContent  = desc;
-
-    const im = document.getElementById('mImg');
-    im.src = img;
-    im.alt = name;
-
-    const wa = document.getElementById('mWA');
-    const msg = encodeURIComponent(`Halo, saya mau tanya tentang ${name} (${rupiah(price)})`);
-    wa.href = `https://wa.me/?text=${msg}`;
-
-    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-    const old = bootstrap.Modal.getInstance(modalEl);
-    if (old) old.dispose();
-    new bootstrap.Modal(modalEl).show();
-  });
-
-  function doSearch(q){
-    applyFilter(q);
-  }
-
-  if (navForm){
-    navForm.addEventListener('submit', e=>{
+  document.getElementById('pageSearchForm')
+    .addEventListener('submit', e=>{
       e.preventDefault();
-      doSearch(navInput ? navInput.value : '');
+      applyFilter(document.getElementById('pageSearchInput').value);
     });
-  }
-
-  if (pageForm){
-    pageForm.addEventListener('submit', e=>{
-      e.preventDefault();
-      doSearch(pageInput.value);
-    });
-  }
 })();
 </script>
 

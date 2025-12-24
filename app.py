@@ -78,6 +78,20 @@ def about():
 @app.route("/api/products")
 def api_products():
     return jsonify(load_products())
+@app.route("/products/all")
+def products_all():
+    return jsonify([
+        {
+            "name": p.name,
+            "category": p.category,
+            "price": p.price,
+            "image": url_for('static', filename='images/' + p.image),
+            "desc": p.desc or "",
+            "spesifikasi_motor": p.spesifikasi_motor or ""
+        }
+        for p in Product.query.all()
+    ])
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
