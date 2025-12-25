@@ -3,7 +3,7 @@
 {% block content %}
 
 <style>
-  /* Paksa gambar kartu di halaman Home menjadi 4:3 (tanpa mengganggu halaman Produk) */
+ 
   #homePage .obj-4x3{
     width:100%;
     aspect-ratio: 4/3 !important;   /* override aturan global 3/4 */
@@ -20,6 +20,78 @@
   /* Modal Styling */
   .modal-backdrop { background-color: rgba(0,0,0,0.5); }
   .modal-body img { max-height: 400px; object-fit: contain; }
+
+  /* Mobile Kecil (< 576px) */
+@media (max-width: 576px) {
+  /* Hero */
+  #homePage .hero h1 { font-size: 1.5rem; }
+  #homePage .hero p { font-size: 0.9rem; }
+  
+  /* Slider produk lebih kecil di mobile */
+  #homePage .product-card { 
+    min-width: 180px; 
+  }
+  
+  /* Hide tombol scroll di mobile (bisa swipe) */
+  #btnScrollLeft, #btnScrollRight { 
+    display: none; 
+  }
+  
+  /* USP Cards lebih compact */
+  .usp-card { 
+    padding: 0.75rem;
+    font-size: 0.9rem; 
+  }
+  .usp-card i { 
+    font-size: 1.5rem !important; 
+  }
+  
+  /* Modal image lebih kecil */
+  .modal-body img { 
+    max-height: 250px; 
+  }
+  
+  /* Maps lebih pendek di mobile */
+  .ratio-16x9 { 
+    aspect-ratio: 4/3; 
+  }
+}
+
+/* Tablet (576px - 991px) */
+@media (min-width: 576px) and (max-width: 991px) {
+  #homePage .product-card { 
+    min-width: 220px; 
+  }
+  
+  /* Tampilkan tombol scroll */
+  #btnScrollLeft, #btnScrollRight { 
+    display: inline-block; 
+  }
+}
+
+/* Desktop (> 992px) */
+@media (min-width: 992px) {
+  #homePage .product-card { 
+    min-width: 260px; 
+  }
+  
+  /* Maps 16:9 untuk desktop */
+  .ratio-16x9 { 
+    aspect-ratio: 16/9; 
+  }
+}
+
+/* Touch devices - perbaiki scrolling */
+@media (hover: none) and (pointer: coarse) {
+  #homePage .track {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  #homePage .track::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+}
 </style>
 
 <div id="homePage">
@@ -122,7 +194,7 @@
         <div class="col-lg-5 order-lg-last">
           <div class="p-3 bg-white rounded shadow-sm small h-100">
             <div class="mb-2"><strong>YudiMotor</strong></div>
-            <div>Senin–Sabtu: 08.00–17.00</div><div>Minggu: Tutup</div>
+            <div>Senin–Minggu: 07.00–21.00</div><div></div>
             <hr>
             <a class="btn btn-success w-100" target="_blank" href="https://wa.me/6285738506679">
               <i class="bi bi-whatsapp me-1"></i> Chat WhatsApp

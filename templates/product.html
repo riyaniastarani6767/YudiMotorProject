@@ -12,6 +12,7 @@
   }
   .card{
     transition:transform .2s ease, box-shadow .2s ease;
+    cursor: pointer;
   }
   .card:hover{
     transform:translateY(-2px);
@@ -20,6 +21,43 @@
   .d-none-important{
     display:none !important;
   }
+  
+  /* Loading indicator */
+  .loading-search {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+  
+  /* Modal Styling - sama seperti home */
+  .modal-backdrop { background-color: rgba(0,0,0,0.5); }
+  .modal-body img { max-height: 400px; object-fit: contain; }
+  /* Responsif untuk mobile kecil */
+@media (max-width: 576px) {
+  .hero h1 { font-size: 1.75rem; }
+  .hero p { font-size: 0.9rem; }
+  
+  .card-body h6 { font-size: 0.85rem; }
+  .card-body .fw-semibold { font-size: 0.9rem; }
+  .btn-detail { font-size: 0.75rem; padding: 0.25rem 0.5rem; }
+  
+  .modal-body img { max-height: 250px; }
+  
+  /* Hide beberapa pagination numbers di mobile */
+  .pagination .page-item:not(.active):not(:first-child):not(:last-child) {
+    display: none;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+  .obj-portrait { aspect-ratio: 3/4; }
+}
+
+/* Desktop besar */
+@media (min-width: 1200px) {
+  .row-cols-lg-3 { --bs-columns: 4; }
+}
 </style>
 
 <section class="hero">
@@ -31,19 +69,27 @@
 
 <div class="container py-4">
 
-  <!-- Search -->
+  <!-- Search Global -->
   <form id="pageSearchForm" class="row g-2 mb-3">
     <div class="col-9 col-md-6">
       <input id="pageSearchInput" type="search" class="form-control"
-             placeholder="Cari produk (mis. aki, ban, oli)..." />
+             placeholder="Cari produk di semua halaman (mis. aki, ban, oli)..." />
     </div>
     <div class="col-auto">
       <button class="btn btn-dark" type="submit">Cari</button>
     </div>
     <div class="col-12 small text-muted">
-      Cari produk menggunakan fitur pencarian di atas. Anda dapat mencari berdasarkan nama atau kategori produk.
+       Temukan produk dari seluruh katalog.
     </div>
   </form>
+
+  <!-- Loading indicator -->
+  <div id="loadingIndicator" class="loading-search" style="display: none;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="mt-2">Mencari produk...</div>
+  </div>
 
   <!-- Grid produk -->
   <div id="prodGrid" class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-3">
@@ -53,7 +99,10 @@
          data-category="{{ p.category|lower }}"
          data-price="{{ p.price }}"
          data-image="{{ url_for('static', filename='images/' + p.image) }}"
-         data-desc="{{ (p.desc or '')|e }}">
+         data-desc="{{ (p.desc or '')|e }}"
+         data-spesifikasi="{{ (p.spesifikasi_motor or '')|e }}"
+         data-name-original="{{ p.name }}"
+         data-category-original="{{ p.category }}">
 
       <div class="card h-100 rounded-3 shadow-sm">
         <img src="{{ url_for('static', filename='images/' + p.image) }}"
@@ -72,7 +121,7 @@
 
           <div class="mt-auto d-flex justify-content-between align-items-center">
             <span class="fw-semibold">
-              Rp {{ p.price }}
+              Rp {{ "{:,.0f}".format(p.price) if p.price is number else p.price | replace(",", ".") }}
             </span>
             <button type="button"
                     class="btn btn-sm btn-dark btn-detail">
@@ -87,7 +136,7 @@
   </div>
 
   <!-- Pagination -->
-  <nav aria-label="Product pagination" class="mt-3">
+  <nav aria-label="Product pagination" class="mt-3" id="paginationNav">
     <ul class="pagination justify-content-center">
 
       <li class="page-item {% if page <= 1 %}disabled{% endif %}">
@@ -118,33 +167,331 @@
 
 </div>
 
+<!-- Modal Detail Produk - Sama seperti Home -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Detail Produk</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <img id="modalImage" src="" alt="" class="img-fluid rounded">
+        </div>
+        <h5 id="modalName" class="fw-bold"></h5>
+        <p class="text-muted mb-2"><small id="modalCategory"></small></p>
+        <h4 class="text-primary mb-3" id="modalPrice"></h4>
+        
+        <div id="modalDesc" class="mb-3"></div>
+        <div id="modalSpesifikasi" class="mb-3"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-success" id="btnOrderWA">
+          <i class="bi bi-whatsapp me-1"></i> Pesan via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-(function(){
+document.addEventListener('DOMContentLoaded', function() {
   const grid = document.getElementById('prodGrid');
   if (!grid) return;
 
-  const cards = Array.from(grid.querySelectorAll('.prod-item'));
+  let allProductsData = [];
+  let isSearching = false;
 
-  function rupiahText(x){
-    return 'Rp ' + (x || '-');
+  // Fungsi untuk format harga dengan titik (240.000)
+  function formatPrice(price) {
+    if (!price) return '-';
+    
+    const priceStr = String(price);
+    
+    // Jika sudah ada strip (range harga) misalnya "240000-350000"
+    if (priceStr.includes('-')) {
+      const parts = priceStr.split('-');
+      return parts.map(p => {
+        const num = p.trim().replace(/\D/g, '');
+        return num ? parseInt(num).toLocaleString('id-ID') : p;
+      }).join(' - ');
+    }
+    
+    // Harga tunggal
+    const cleanPrice = priceStr.replace(/\D/g, '');
+    if (cleanPrice && !isNaN(cleanPrice)) {
+      return parseInt(cleanPrice).toLocaleString('id-ID');
+    }
+    
+    return priceStr;
   }
 
-  function applyFilter(term){
+  // Load semua produk untuk global search
+  async function loadAllProducts() {
+    try {
+      console.log('Fetching all products from /products/all...');
+      const response = await fetch('/products/all');
+      
+      if (!response.ok) {
+        throw new Error('Response not OK: ' + response.status);
+      }
+      
+      const data = await response.json();
+      console.log('Raw data from API:', data);
+      
+      allProductsData = data;
+      console.log('✅ Loaded', allProductsData.length, 'products for global search');
+      
+    } catch (error) {
+      console.error('❌ Error loading products from API:', error);
+      console.log('⚠️ Using fallback: products from current page');
+      
+      // FALLBACK: Ambil semua produk dari DOM yang ada di halaman ini
+      const cards = Array.from(document.querySelectorAll('.prod-item'));
+      allProductsData = cards.map(card => ({
+        name: card.dataset.nameOriginal,
+        category: card.dataset.categoryOriginal,
+        price: card.dataset.price,
+        image: card.dataset.image,
+        desc: card.dataset.desc || '',
+        spesifikasi_motor: card.dataset.spesifikasi || ''
+      }));
+      
+      console.log('✅ Fallback: Loaded', allProductsData.length, 'products from current page');
+    }
+  }
+
+  // Fungsi untuk membuat card HTML
+  function createProductCard(product) {
+    const col = document.createElement('div');
+    col.className = 'col prod-item';
+    
+    const nameLower = product.name.toLowerCase();
+    const categoryLower = product.category.toLowerCase();
+    
+    col.dataset.name = nameLower;
+    col.dataset.category = categoryLower;
+    col.dataset.price = product.price;
+    col.dataset.image = product.image;
+    col.dataset.desc = product.desc || '';
+    col.dataset.spesifikasi = product.spesifikasi_motor || '';
+    col.dataset.nameOriginal = product.name;
+    col.dataset.categoryOriginal = product.category;
+
+    const formattedPrice = formatPrice(product.price);
+
+    col.innerHTML = `
+      <div class="card h-100 rounded-3 shadow-sm">
+        <img src="${product.image}" class="card-img-top obj-portrait" alt="${product.name}">
+        <div class="card-body d-flex flex-column">
+          <h6 class="text-truncate text-uppercase fw-semibold" title="${product.name}">
+            ${product.name}
+          </h6>
+          <p class="small text-uppercase text-muted mb-2">
+            ${product.category}
+          </p>
+          <div class="mt-auto d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">Rp ${formattedPrice}</span>
+            <button type="button" class="btn btn-sm btn-dark btn-detail">Detail</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Add event listeners
+    const detailBtn = col.querySelector('.btn-detail');
+    detailBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showProductModal({
+        name: product.name,
+        category: product.category,
+        price: product.price,
+        image: product.image,
+        desc: product.desc || '',
+        spesifikasi: product.spesifikasi_motor || ''
+      });
+    });
+
+    const card = col.querySelector('.card');
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.btn-detail')) return;
+      showProductModal({
+        name: product.name,
+        category: product.category,
+        price: product.price,
+        image: product.image,
+        desc: product.desc || '',
+        spesifikasi: product.spesifikasi_motor || ''
+      });
+    });
+
+    return col;
+  }
+
+  // Fungsi untuk apply filter/search
+  async function applyFilter(term) {
     const q = (term || '').trim().toLowerCase();
-    cards.forEach(card => {
-      const name = card.dataset.name || '';
-      const cat  = card.dataset.category || '';
-      const match = !q || name.includes(q) || cat.includes(q);
-      card.classList.toggle('d-none-important', !match);
+    console.log('Search term:', q);
+    
+    if (!q) {
+      // Reset: reload halaman untuk tampilkan produk original
+      location.reload();
+      return;
+    }
+
+    isSearching = true;
+    document.getElementById('paginationNav').style.display = 'none';
+    document.getElementById('loadingIndicator').style.display = 'block';
+
+    // Load all products jika belum
+    if (allProductsData.length === 0) {
+      await loadAllProducts();
+    }
+
+    console.log('Total products to search:', allProductsData.length);
+
+    // Filter produk dari SEMUA data (global search)
+    const filtered = allProductsData.filter(p => {
+      const name = (p.name || '').toLowerCase();
+      const cat = (p.category || '').toLowerCase();
+      const match = name.includes(q) || cat.includes(q);
+      return match;
     });
+
+    console.log('Filtered results:', filtered.length);
+
+    // Clear grid dan rebuild dengan hasil search
+    grid.innerHTML = '';
+    
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="col-12 text-center py-5">
+        <p class="text-muted">Tidak ada produk yang ditemukan untuk "<strong>${term}</strong>"</p>
+        <button class="btn btn-primary btn-sm" onclick="location.reload()">Lihat Semua Produk</button>
+      </div>`;
+    } else {
+      filtered.forEach(product => {
+        grid.appendChild(createProductCard(product));
+      });
+    }
+
+    document.getElementById('loadingIndicator').style.display = 'none';
   }
 
-  document.getElementById('pageSearchForm')
-    .addEventListener('submit', e=>{
-      e.preventDefault();
-      applyFilter(document.getElementById('pageSearchInput').value);
+  // Event handlers untuk search
+  document.getElementById('pageSearchForm').addEventListener('submit', e => {
+    e.preventDefault();
+    applyFilter(document.getElementById('pageSearchInput').value);
+  });
+
+  // Real-time search (debounced)
+  let searchTimeout;
+  document.getElementById('pageSearchInput').addEventListener('input', e => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      applyFilter(e.target.value);
+    }, 500);
+  });
+
+  // Inisialisasi Bootstrap Modal
+  const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+  let currentProductData = null;
+  
+  // Fungsi untuk menampilkan modal
+  function showProductModal(productData) {
+    currentProductData = productData;
+    
+    document.getElementById('modalImage').src = productData.image;
+    document.getElementById('modalImage').alt = productData.name;
+    document.getElementById('modalName').textContent = productData.name;
+    document.getElementById('modalCategory').textContent = productData.category;
+    
+    // Format harga dengan titik
+    const priceText = 'Rp ' + formatPrice(productData.price);
+    document.getElementById('modalPrice').textContent = priceText;
+    
+    // Deskripsi
+    const descEl = document.getElementById('modalDesc');
+    if (productData.desc && productData.desc.trim()) {
+      descEl.innerHTML = '<strong>Deskripsi:</strong><br>' + productData.desc.replace(/\n/g, '<br>');
+      descEl.style.display = 'block';
+    } else {
+      descEl.style.display = 'none';
+    }
+    
+    // Spesifikasi Motor
+    const spesifikasiEl = document.getElementById('modalSpesifikasi');
+    if (productData.spesifikasi && productData.spesifikasi.trim()) {
+      spesifikasiEl.innerHTML = '<strong>Cocok untuk motor:</strong><br>' + productData.spesifikasi;
+      spesifikasiEl.style.display = 'block';
+    } else {
+      spesifikasiEl.style.display = 'none';
+    }
+    
+    productModal.show();
+  }
+
+  // Attach event listeners ke card yang sudah ada
+  document.querySelectorAll('.btn-detail').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const parent = this.closest('.prod-item');
+      if (parent) {
+        showProductModal({
+          name: parent.dataset.nameOriginal,
+          category: parent.dataset.categoryOriginal,
+          price: parent.dataset.price,
+          image: parent.dataset.image,
+          desc: parent.dataset.desc || '',
+          spesifikasi: parent.dataset.spesifikasi || ''
+        });
+      }
     });
-})();
+  });
+  
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.btn-detail')) return;
+      const parent = this.closest('.prod-item');
+      if (parent) {
+        showProductModal({
+          name: parent.dataset.nameOriginal,
+          category: parent.dataset.categoryOriginal,
+          price: parent.dataset.price,
+          image: parent.dataset.image,
+          desc: parent.dataset.desc || '',
+          spesifikasi: parent.dataset.spesifikasi || ''
+        });
+      }
+    });
+  });
+  
+  // Handler WhatsApp
+  document.getElementById('btnOrderWA').addEventListener('click', function() {
+    if (currentProductData) {
+      const priceText = 'Rp ' + formatPrice(currentProductData.price);
+      
+      let message = `Halo, saya tertarik dengan produk:\n\n` +
+                   `Nama: ${currentProductData.name}\n` +
+                   `Kategori: ${currentProductData.category}\n` +
+                   `Harga: ${priceText}\n`;
+      
+      if (currentProductData.spesifikasi && currentProductData.spesifikasi.trim()) {
+        message += `Motor: ${currentProductData.spesifikasi}\n`;
+      }
+      
+      message += `\nApakah produk ini tersedia?`;
+      
+      const waUrl = `https://wa.me/6285738506679?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+    }
+  });
+
+  // Load all products di background saat halaman dimuat
+  console.log('Starting to load all products...');
+  loadAllProducts();
+});
 </script>
 
 {% endblock %}

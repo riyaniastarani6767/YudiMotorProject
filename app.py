@@ -1,38 +1,6 @@
-# from flask import Flask, render_template, jsonify
-# import os, json
 
-# app = Flask(__name__)
 
-# def _load_json(relpath):
-#     with open(os.path.join(app.static_folder, relpath), "r", encoding="utf-8") as f:
-#         return json.load(f)
-
-# def load_products():
-#     return _load_json(os.path.join("data", "products.json"))
-
-# def load_home_products():
-#     return _load_json(os.path.join("data", "homeProducts.json"))
-
-# @app.route("/")
-# def home():
-#     return render_template("index.html", products_home=load_home_products())
-
-# @app.route("/products")
-# def products_page():
-#     return render_template("product.html", products=load_products())
-
-# @app.route("/about")
-# def about():
-#     return render_template("about.html")
-
-# @app.route("/api/products")
-# def api_products():
-#     return jsonify(load_products())
-
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", port=8080, debug=True)
-
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, url_for
 import os, json
 from math import ceil
 
@@ -71,6 +39,7 @@ def products_page():
         page=page,
         total_pages=total_pages,
     )
+
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -78,19 +47,31 @@ def about():
 @app.route("/api/products")
 def api_products():
     return jsonify(load_products())
+
 @app.route("/products/all")
 def products_all():
-    return jsonify([
-        {
-            "name": p.name,
-            "category": p.category,
-            "price": p.price,
-            "image": url_for('static', filename='images/' + p.image),
-            "desc": p.desc or "",
-            "spesifikasi_motor": p.spesifikasi_motor or ""
-        }
-        for p in Product.query.all()
-    ])
+    try:
+        products = load_products()
+        
+        # Format setiap produk dengan URL gambar yang benar
+        result = []
+        for p in products:
+            result.append({
+                "name": p.get("name", ""),
+                "category": p.get("category", ""),
+                "price": p.get("price", ""),
+                "image": url_for('static', filename='images/' + p.get("image", "")),
+                "desc": p.get("desc", ""),
+                "spesifikasi_motor": p.get("spesifikasi_motor", "")
+            })
+        
+        print(f"✅ /products/all returning {len(result)} products")
+        return jsonify(result)
+    except Exception as e:
+        print("❌ Error in /products/all:", str(e))
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
